@@ -1,8 +1,10 @@
 #!/bin/bash
 
+kernel_opt=$1
+
 # Define where to build and from what dir to build
 
-    BUILD_DIR="/lib/modules/`uname -r`/build"
+    BUILD_DIR="/lib/modules/${kernel_opt}/build"
     TEMPDIR="tmp"
 
 die(){
@@ -40,7 +42,7 @@ confirmno(){
 }
 
 success(){
-depmod -a
+depmod -a ${kernel_opt}
 echo -en "
 
 ####################################################################
@@ -87,10 +89,10 @@ Aborting...
 
 # Get kernel version numbers
 
-    SHORT_KERNEL="$( echo `uname -r` | grep -o '[[:digit:]]\+\.[[:digit:]]\+' )"
-    FIRST_DIGIT="$( echo `uname -r` | grep -o '[[:digit:]]\+' | head -n1 )"
-    SECOND_DIGIT="$( echo `uname -r` | grep -o '[[:digit:]]\+' | head -n2 | awk 'NR==2' )"
-    PATCHLEVEL="$( echo `uname -r` | grep -o '[[:digit:]]\+' | head -n3 | awk 'NR==3' )"
+    SHORT_KERNEL="$( echo ${kernel_opt} | grep -o '[[:digit:]]\+\.[[:digit:]]\+' )"
+    FIRST_DIGIT="$( echo ${kernel_opt} | grep -o '[[:digit:]]\+' | head -n1 )"
+    SECOND_DIGIT="$( echo ${kernel_opt} | grep -o '[[:digit:]]\+' | head -n2 | awk 'NR==2' )"
+    PATCHLEVEL="$( echo ${kernel_opt} | grep -o '[[:digit:]]\+' | head -n3 | awk 'NR==3' )"
     UBUNTU_KERNEL="$SHORT_KERNEL.0"
 
 # Abort if running kernel is < 3.x
@@ -148,8 +150,8 @@ will be patched for use with ffdecsawrapper.
           fail
         fi
         CC="$GCC" make -C $BUILD_DIR M=$CWD/drivers/media/dvb/dvb-core modules
-        mkdir -p /lib/modules/`uname -r`/updates/ffdecsawrapper > /dev/null 2>&1
-        /usr/bin/install $CWD/drivers/media/dvb/dvb-core/dvb-core.ko /lib/modules/`uname -r`/updates/ffdecsawrapper
+        mkdir -p /lib/modules/${kernel_opt}/updates/ffdecsawrapper > /dev/null 2>&1
+        /usr/bin/install $CWD/drivers/media/dvb/dvb-core/dvb-core.ko /lib/modules/${kernel_opt}/updates/ffdecsawrapper
         if [ "$?" -eq 0 ]; then
           success
         else
@@ -161,8 +163,8 @@ will be patched for use with ffdecsawrapper.
           fail
         fi
         CC="$GCC" make -C $BUILD_DIR M=$CWD/drivers/media/dvb-core modules
-        mkdir -p /lib/modules/`uname -r`/updates/ffdecsawrapper > /dev/null 2>&1
-        /usr/bin/install $CWD/drivers/media/dvb-core/dvb-core.ko /lib/modules/`uname -r`/updates/ffdecsawrapper
+        mkdir -p /lib/modules/${kernel_opt}/updates/ffdecsawrapper > /dev/null 2>&1
+        /usr/bin/install $CWD/drivers/media/dvb-core/dvb-core.ko /lib/modules/${kernel_opt}/updates/ffdecsawrapper
         if [ "$?" -eq 0 ]; then
           success
         else
@@ -174,8 +176,8 @@ will be patched for use with ffdecsawrapper.
           fail
         fi
         CC="$GCC" make -C $BUILD_DIR M=$CWD/drivers/media/dvb-core modules
-        mkdir -p /lib/modules/`uname -r`/updates/ffdecsawrapper > /dev/null 2>&1
-        /usr/bin/install $CWD/drivers/media/dvb-core/dvb-core.ko /lib/modules/`uname -r`/updates/ffdecsawrapper
+        mkdir -p /lib/modules/${kernel_opt}/updates/ffdecsawrapper > /dev/null 2>&1
+        /usr/bin/install $CWD/drivers/media/dvb-core/dvb-core.ko /lib/modules/${kernel_opt}/updates/ffdecsawrapper
         if [ "$?" -eq 0 ]; then
           success
         else
@@ -188,8 +190,8 @@ will be patched for use with ffdecsawrapper.
         fail
       fi
       CC="$GCC" make -C $BUILD_DIR M=$CWD/drivers/media/dvb-core modules
-      mkdir -p /lib/modules/`uname -r`/updates/ffdecsawrapper > /dev/null 2>&1
-      /usr/bin/install $CWD/drivers/media/dvb-core/dvb-core.ko /lib/modules/`uname -r`/updates/ffdecsawrapper
+      mkdir -p /lib/modules/${kernel_opt}/updates/ffdecsawrapper > /dev/null 2>&1
+      /usr/bin/install $CWD/drivers/media/dvb-core/dvb-core.ko /lib/modules/${kernel_opt}/updates/ffdecsawrapper
       if [ "$?" -eq 0 ]; then
         success
       else

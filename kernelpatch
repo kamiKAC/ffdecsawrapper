@@ -1,5 +1,7 @@
 #!/bin/bash
 
+kernel_opt=$1
+
 die(){
     echo $1
     exit 1
@@ -35,7 +37,7 @@ confirmno(){
 }
 
 success(){
-depmod -a
+depmod -a ${kernel_opt}
 echo -en "
 
 ####################################################################
@@ -80,14 +82,14 @@ Aborting...
 
 # Get kernel version numbers
 
-    SHORT_KERNEL="$( echo `uname -r` | grep -o '[[:digit:]]\+\.[[:digit:]]\+' )"
-    FIRST_DIGIT="$( echo `uname -r` | grep -o '[[:digit:]]\+' | head -n1 )"
-    SECOND_DIGIT="$( echo `uname -r` | grep -o '[[:digit:]]\+' | head -n2 | awk 'NR==2' )"
-    PATCHLEVEL="$( echo `uname -r` | grep -o '[[:digit:]]\+' | head -n3 | awk 'NR==3' )"
+    SHORT_KERNEL="$( echo ${kernel_opt} | grep -o '[[:digit:]]\+\.[[:digit:]]\+' )"
+    FIRST_DIGIT="$( echo ${kernel_opt} | grep -o '[[:digit:]]\+' | head -n1 )"
+    SECOND_DIGIT="$( echo ${kernel_opt} | grep -o '[[:digit:]]\+' | head -n2 | awk 'NR==2' )"
+    PATCHLEVEL="$( echo ${kernel_opt} | grep -o '[[:digit:]]\+' | head -n3 | awk 'NR==3' )"
 
 # Define where to build and from what dir to build
 
-    BUILD_DIR="/lib/modules/`uname -r`/build"
+    BUILD_DIR="/lib/modules/${kernel_opt}/build"
     TEMPDIR="/usr/src/$SHORT_KERNEL"
 
 
@@ -141,7 +143,7 @@ will be patched for use with ffdecsawrapper.
 # Compile the patched dvb-core.ko module and install it
 
     echo "
-Building patched dvb-core module for kernel `uname -r`
+Building patched dvb-core module for kernel ${kernel_opt}
 
 Preparing, this may take a while...
 "
@@ -162,8 +164,8 @@ Building and installing
           fail
         fi
         CC="$GCC" make -C $BUILD_DIR M=$TEMPDIR modules
-        mkdir -p /lib/modules/`uname -r`/updates/ffdecsawrapper > /dev/null 2>&1
-        /usr/bin/install $TEMPDIR/dvb-core.ko /lib/modules/`uname -r`/updates/ffdecsawrapper
+        mkdir -p /lib/modules/${kernel_opt}/updates/ffdecsawrapper > /dev/null 2>&1
+        /usr/bin/install $TEMPDIR/dvb-core.ko /lib/modules/${kernel_opt}/updates/ffdecsawrapper
         if [ "$?" -eq 0 ]; then
           success
         else
@@ -183,8 +185,8 @@ Building and installing
           fail
         fi
         CC="$GCC" make -C $BUILD_DIR M=$TEMPDIR modules
-        mkdir -p /lib/modules/`uname -r`/updates/ffdecsawrapper > /dev/null 2>&1
-        /usr/bin/install $TEMPDIR/dvb-core.ko /lib/modules/`uname -r`/updates/ffdecsawrapper
+        mkdir -p /lib/modules/${kernel_opt}/updates/ffdecsawrapper > /dev/null 2>&1
+        /usr/bin/install $TEMPDIR/dvb-core.ko /lib/modules/${kernel_opt}/updates/ffdecsawrapper
         if [ "$?" -eq 0 ]; then
           success
         else
@@ -204,8 +206,8 @@ Building and installing
           fail
         fi
         CC="$GCC" make -C $BUILD_DIR M=$TEMPDIR modules
-        mkdir -p /lib/modules/`uname -r`/updates/ffdecsawrapper > /dev/null 2>&1
-        /usr/bin/install $TEMPDIR/dvb-core.ko /lib/modules/`uname -r`/updates/ffdecsawrapper
+        mkdir -p /lib/modules/${kernel_opt}/updates/ffdecsawrapper > /dev/null 2>&1
+        /usr/bin/install $TEMPDIR/dvb-core.ko /lib/modules/${kernel_opt}/updates/ffdecsawrapper
         if [ "$?" -eq 0 ]; then
           success
         else
@@ -226,8 +228,8 @@ Building and installing
         fail
       fi
       CC="$GCC" make -C $BUILD_DIR M=$TEMPDIR modules
-      mkdir -p /lib/modules/`uname -r`/updates/ffdecsawrapper > /dev/null 2>&1
-      /usr/bin/install $TEMPDIR/dvb-core.ko /lib/modules/`uname -r`/updates/ffdecsawrapper
+      mkdir -p /lib/modules/${kernel_opt}/updates/ffdecsawrapper > /dev/null 2>&1
+      /usr/bin/install $TEMPDIR/dvb-core.ko /lib/modules/${kernel_opt}/updates/ffdecsawrapper
       if [ "$?" -eq 0 ]; then
         success
       else
